@@ -279,159 +279,282 @@ export default function AdminPortal({
 
       {/* Main Registrations Table */}
       <div className="bg-slate-900/30 border border-slate-800 rounded-3xl overflow-hidden shadow-xl">
-        <div className="overflow-x-auto">
-          {filteredRegistrations.length === 0 ? (
-            <div className="p-12 text-center text-slate-500">
-              <AlertTriangle className="w-7 h-7 text-zinc-600 mx-auto mb-2" />
-              <p className="text-xs">No matching athletes found</p>
-              <p className="text-[10px] text-zinc-600 mt-1">Try relaxing your search parameters or check filters.</p>
-            </div>
-          ) : (
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="border-b border-slate-850 bg-slate-950/50 text-[9px] font-mono uppercase tracking-wider text-slate-500">
-                  <th className="py-3 px-4">Athlete ID / Details</th>
-                  <th className="py-3 px-4">University ID & Contact</th>
-                  <th className="py-3 px-4">Focus Discipline</th>
-                  <th className="py-3 px-4">Campus Dept</th>
-                  <th className="py-3 px-4">Audit Status</th>
-                  <th className="py-3 px-4 text-center">Quick Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-850 text-xs">
-                {filteredRegistrations.map((reg) => {
-                  const resolvedStatus = reg.status || 'Approved';
-                  const primarySportConfig = SPORTS_LIST.find(s => s.id === reg.primarySport);
-                  const secondarySportConfig = SPORTS_LIST.find(s => s.id === reg.secondarySport);
+        {filteredRegistrations.length === 0 ? (
+          <div className="p-12 text-center text-slate-500">
+            <AlertTriangle className="w-7 h-7 text-zinc-600 mx-auto mb-2" />
+            <p className="text-xs">No matching athletes found</p>
+            <p className="text-[10px] text-zinc-600 mt-1">Try relaxing your search parameters or check filters.</p>
+          </div>
+        ) : (
+          <>
+            {/* Desktop Table View */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-slate-850 bg-slate-950/50 text-[9px] font-mono uppercase tracking-wider text-slate-500">
+                    <th className="py-3 px-4">Athlete ID / Details</th>
+                    <th className="py-3 px-4">University ID & Contact</th>
+                    <th className="py-3 px-4">Focus Discipline</th>
+                    <th className="py-3 px-4">Campus Dept</th>
+                    <th className="py-3 px-4">Audit Status</th>
+                    <th className="py-3 px-4 text-center">Quick Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-850 text-xs">
+                  {filteredRegistrations.map((reg) => {
+                    const resolvedStatus = reg.status || 'Approved';
+                    const primarySportConfig = SPORTS_LIST.find(s => s.id === reg.primarySport);
+                    const secondarySportConfig = SPORTS_LIST.find(s => s.id === reg.secondarySport);
 
-                  return (
-                    <tr key={reg.id} className="hover:bg-slate-900/20 transition-colors">
-                      {/* Name & ID */}
-                      <td className="py-3.5 px-4">
-                        <div className="flex items-center gap-2.5">
-                          <div className="w-8 h-8 rounded-full bg-slate-950 border border-slate-800 flex items-center justify-center text-sm overflow-hidden shrink-0">
-                            {reg.avatarUrl ? (
-                              <img src={reg.avatarUrl} alt="" className="w-full h-full object-cover" />
-                            ) : (
-                              <span>{primarySportConfig?.emoji || '🏅'}</span>
-                            )}
+                    return (
+                      <tr key={reg.id} className="hover:bg-slate-900/20 transition-colors">
+                        {/* Name & ID */}
+                        <td className="py-3.5 px-4">
+                          <div className="flex items-center gap-2.5">
+                            <div className="w-8 h-8 rounded-full bg-slate-950 border border-slate-800 flex items-center justify-center text-sm overflow-hidden shrink-0">
+                              {reg.avatarUrl ? (
+                                <img src={reg.avatarUrl} alt="" className="w-full h-full object-cover" />
+                              ) : (
+                                <span>{primarySportConfig?.emoji || '🏅'}</span>
+                              )}
+                            </div>
+                            <div>
+                              <p className="font-bold text-slate-100">{reg.fullName}</p>
+                              <p className="text-[9px] font-mono text-amber-500 mt-0.5">{reg.id}</p>
+                            </div>
                           </div>
-                          <div>
-                            <p className="font-bold text-slate-100">{reg.fullName}</p>
-                            <p className="text-[9px] font-mono text-amber-500 mt-0.5">{reg.id}</p>
+                        </td>
+
+                        {/* University ID & Contact */}
+                        <td className="py-3.5 px-4 font-mono">
+                          <p className="text-[11px] text-zinc-200 font-bold">{reg.studentId}</p>
+                          <div className="flex items-center gap-2.5 text-[9px] text-slate-500 mt-0.5">
+                            <span className="flex items-center gap-0.5"><Mail className="w-2.5 h-2.5" /> {reg.email}</span>
+                            <span className="flex items-center gap-0.5"><Phone className="w-2.5 h-2.5" /> {reg.phone}</span>
                           </div>
-                        </div>
-                      </td>
+                        </td>
 
-                      {/* University ID & Contact */}
-                      <td className="py-3.5 px-4 font-mono">
-                        <p className="text-[11px] text-zinc-200 font-bold">{reg.studentId}</p>
-                        <div className="flex items-center gap-2.5 text-[9px] text-slate-500 mt-0.5">
-                          <span className="flex items-center gap-0.5"><Mail className="w-2.5 h-2.5" /> {reg.email}</span>
-                          <span className="flex items-center gap-0.5"><Phone className="w-2.5 h-2.5" /> {reg.phone}</span>
-                        </div>
-                      </td>
-
-                      {/* Focus Discipline */}
-                      <td className="py-3.5 px-4">
-                        <div className="flex items-center gap-1">
-                          <span className="text-sm shrink-0">{primarySportConfig?.emoji}</span>
-                          <div className="text-left">
-                            <span className="font-bold text-slate-200 block text-[11px]">{primarySportConfig?.name || reg.primarySport}</span>
-                            <span className="text-[9px] font-mono text-zinc-500">Secondary: {secondarySportConfig?.emoji} {secondarySportConfig?.name || reg.secondarySport}</span>
+                        {/* Focus Discipline */}
+                        <td className="py-3.5 px-4">
+                          <div className="flex items-center gap-1">
+                            <span className="text-sm shrink-0">{primarySportConfig?.emoji}</span>
+                            <div className="text-left">
+                              <span className="font-bold text-slate-200 block text-[11px]">{primarySportConfig?.name || reg.primarySport}</span>
+                              <span className="text-[9px] font-mono text-zinc-500">Secondary: {secondarySportConfig?.emoji} {secondarySportConfig?.name || reg.secondarySport}</span>
+                            </div>
                           </div>
-                        </div>
-                      </td>
+                        </td>
 
-                      {/* Department / School */}
-                      <td className="py-3.5 px-4 font-mono text-[10px] text-zinc-400">
-                        <span className="font-black text-amber-500/80">{reg.school}</span>
-                        <p className="text-[9px] text-zinc-500 truncate max-w-[150px]">{reg.department} ({reg.yearOfStudy})</p>
-                      </td>
+                        {/* Department / School */}
+                        <td className="py-3.5 px-4 font-mono text-[10px] text-zinc-400">
+                          <span className="font-black text-amber-500/80">{reg.school}</span>
+                          <p className="text-[9px] text-zinc-500 truncate max-w-[150px]">{reg.department} ({reg.yearOfStudy})</p>
+                        </td>
 
-                      {/* Status */}
-                      <td className="py-3.5 px-4">
-                        <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider ${
-                          resolvedStatus === 'Approved'
-                            ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                            : resolvedStatus === 'Pending'
-                            ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                            : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
-                        }`}>
-                          <span className={`w-1 h-1 rounded-full ${
-                            resolvedStatus === 'Approved' ? 'bg-emerald-400' : resolvedStatus === 'Pending' ? 'bg-amber-400 animate-ping' : 'bg-rose-400'
-                          }`} />
-                          {resolvedStatus}
-                        </span>
-                      </td>
+                        {/* Status */}
+                        <td className="py-3.5 px-4">
+                          <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider ${
+                            resolvedStatus === 'Approved'
+                              ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                              : resolvedStatus === 'Pending'
+                              ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                              : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+                          }`}>
+                            <span className={`w-1 h-1 rounded-full ${
+                              resolvedStatus === 'Approved' ? 'bg-emerald-400' : resolvedStatus === 'Pending' ? 'bg-amber-400 animate-ping' : 'bg-rose-400'
+                            }`} />
+                            {resolvedStatus}
+                          </span>
+                        </td>
 
-                      {/* Quick Actions */}
-                      <td className="py-3.5 px-4 text-center">
-                        <div className="flex items-center justify-center gap-1.5">
-                          
-                          {/* Card Preview */}
-                          <button
-                            onClick={() => setSelectedPreview(reg)}
-                            title="Verify Athlete ID Card"
-                            className="p-1.5 bg-slate-950 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 hover:border-slate-700 rounded-lg transition-all cursor-pointer"
-                          >
-                            <Eye className="w-3.5 h-3.5" />
-                          </button>
-
-                          {resolvedStatus === 'Pending' && (
-                            <>
-                              {/* Approve Button */}
-                              <button
-                                onClick={() => onUpdateStatus(reg.id, 'Approved')}
-                                title="Approve Registration"
-                                className="p-1.5 bg-emerald-500/10 hover:bg-emerald-500 hover:text-slate-950 text-emerald-400 border border-emerald-500/20 rounded-lg transition-all cursor-pointer"
-                              >
-                                <Check className="w-3.5 h-3.5" />
-                              </button>
-
-                              {/* Reject Button */}
-                              <button
-                                onClick={() => onUpdateStatus(reg.id, 'Rejected')}
-                                title="Decline Audit"
-                                className="p-1.5 bg-rose-500/10 hover:bg-rose-500 hover:text-white text-rose-400 border border-rose-500/20 rounded-lg transition-all cursor-pointer"
-                              >
-                                <X className="w-3.5 h-3.5" />
-                              </button>
-                            </>
-                          )}
-
-                          {resolvedStatus !== 'Pending' && (
+                        {/* Quick Actions */}
+                        <td className="py-3.5 px-4 text-center">
+                          <div className="flex items-center justify-center gap-1.5">
+                            
+                            {/* Card Preview */}
                             <button
-                              onClick={() => onUpdateStatus(reg.id, resolvedStatus === 'Approved' ? 'Rejected' : 'Approved')}
-                              title={resolvedStatus === 'Approved' ? 'Decline Audit' : 'Approve Audit'}
-                              className={`p-1.5 border rounded-lg transition-all cursor-pointer text-slate-400 ${
-                                resolvedStatus === 'Approved' 
-                                  ? 'bg-slate-950 hover:bg-rose-500/10 hover:text-rose-400 border-slate-800' 
-                                  : 'bg-slate-950 hover:bg-emerald-500/10 hover:text-emerald-400 border-slate-800'
-                              }`}
+                              onClick={() => setSelectedPreview(reg)}
+                              title="Verify Athlete ID Card"
+                              className="p-1.5 bg-slate-950 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 hover:border-slate-700 rounded-lg transition-all cursor-pointer"
                             >
-                              <RefreshCw className="w-3.5 h-3.5" />
+                              <Eye className="w-3.5 h-3.5" />
                             </button>
-                          )}
 
-                          {/* Delete Action */}
+                            {resolvedStatus === 'Pending' && (
+                              <>
+                                {/* Approve Button */}
+                                <button
+                                  onClick={() => onUpdateStatus(reg.id, 'Approved')}
+                                  title="Approve Registration"
+                                  className="p-1.5 bg-emerald-500/10 hover:bg-emerald-500 hover:text-slate-950 text-emerald-400 border border-emerald-500/20 rounded-lg transition-all cursor-pointer"
+                                >
+                                  <Check className="w-3.5 h-3.5" />
+                                </button>
+
+                                {/* Reject Button */}
+                                <button
+                                  onClick={() => onUpdateStatus(reg.id, 'Rejected')}
+                                  title="Decline Audit"
+                                  className="p-1.5 bg-rose-500/10 hover:bg-rose-500 hover:text-white text-rose-400 border border-rose-500/20 rounded-lg transition-all cursor-pointer"
+                                >
+                                  <X className="w-3.5 h-3.5" />
+                                </button>
+                              </>
+                            )}
+
+                            {resolvedStatus !== 'Pending' && (
+                              <button
+                                onClick={() => onUpdateStatus(reg.id, resolvedStatus === 'Approved' ? 'Rejected' : 'Approved')}
+                                title={resolvedStatus === 'Approved' ? 'Decline Audit' : 'Approve Audit'}
+                                className={`p-1.5 border rounded-lg transition-all cursor-pointer text-slate-400 ${
+                                  resolvedStatus === 'Approved' 
+                                    ? 'bg-slate-950 hover:bg-rose-500/10 hover:text-rose-400 border-slate-800' 
+                                    : 'bg-slate-950 hover:bg-emerald-500/10 hover:text-emerald-400 border-slate-800'
+                                }`}
+                              >
+                                <RefreshCw className="w-3.5 h-3.5" />
+                              </button>
+                            )}
+
+                            {/* Delete Action */}
+                            <button
+                              onClick={() => setConfirmDeleteId(reg.id)}
+                              title="Purge Registration"
+                              className="p-1.5 bg-slate-950 hover:bg-red-500/10 hover:border-red-500/20 text-slate-500 hover:text-red-400 border border-slate-800 rounded-lg transition-all cursor-pointer"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Cards View */}
+            <div className="block md:hidden divide-y divide-slate-850">
+              {filteredRegistrations.map((reg) => {
+                const resolvedStatus = reg.status || 'Approved';
+                const primarySportConfig = SPORTS_LIST.find(s => s.id === reg.primarySport);
+                const secondarySportConfig = SPORTS_LIST.find(s => s.id === reg.secondarySport);
+
+                return (
+                  <div key={reg.id} className="p-4 space-y-3.5 hover:bg-slate-900/10 transition-colors">
+                    {/* Header: Name, ID, status */}
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-slate-950 border border-slate-800 flex items-center justify-center text-base overflow-hidden shrink-0">
+                          {reg.avatarUrl ? (
+                            <img src={reg.avatarUrl} alt="" className="w-full h-full object-cover" />
+                          ) : (
+                            <span>{primarySportConfig?.emoji || '🏅'}</span>
+                          )}
+                        </div>
+                        <div>
+                          <p className="font-bold text-slate-100 text-sm">{reg.fullName}</p>
+                          <p className="text-[10px] font-mono text-amber-500">{reg.id}</p>
+                        </div>
+                      </div>
+
+                      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider ${
+                        resolvedStatus === 'Approved'
+                          ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                          : resolvedStatus === 'Pending'
+                          ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                          : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+                      }`}>
+                        <span className={`w-1 h-1 rounded-full ${
+                          resolvedStatus === 'Approved' ? 'bg-emerald-400' : resolvedStatus === 'Pending' ? 'bg-amber-400 animate-ping' : 'bg-rose-400'
+                        }`} />
+                        {resolvedStatus}
+                      </span>
+                    </div>
+
+                    {/* Meta Fields */}
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-2 bg-slate-950/40 border border-slate-850/60 p-3 rounded-xl text-[11px]">
+                      <div>
+                        <span className="text-slate-500 font-mono text-[9px] block uppercase">University ID</span>
+                        <span className="font-mono text-slate-200 font-bold">{reg.studentId}</span>
+                      </div>
+                      <div>
+                        <span className="text-slate-500 font-mono text-[9px] block uppercase">Campus Dept</span>
+                        <span className="text-slate-200 font-bold">{reg.school} • <span className="text-zinc-400 font-medium">{reg.department} ({reg.yearOfStudy})</span></span>
+                      </div>
+                      <div className="col-span-2 border-t border-slate-850/60 pt-2 mt-1">
+                        <span className="text-slate-500 font-mono text-[9px] block uppercase">Sports Discipline</span>
+                        <span className="text-slate-200 font-bold text-[11.5px]">
+                          {primarySportConfig?.emoji} {primarySportConfig?.name || reg.primarySport}{' '}
+                          <span className="text-zinc-500 font-normal">
+                            (Sec: {secondarySportConfig?.emoji} {secondarySportConfig?.name || reg.secondarySport})
+                          </span>
+                        </span>
+                      </div>
+                      <div className="col-span-2 border-t border-slate-850/60 pt-2">
+                        <span className="text-slate-500 font-mono text-[9px] block uppercase">Contact Details</span>
+                        <div className="flex flex-col gap-0.5 text-[10px] text-zinc-400 font-mono mt-0.5">
+                          <span className="flex items-center gap-1.5"><Mail className="w-3.5 h-3.5 text-zinc-600" /> {reg.email}</span>
+                          <span className="flex items-center gap-1.5"><Phone className="w-3.5 h-3.5 text-zinc-600" /> {reg.phone}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Actions Panel */}
+                    <div className="flex items-center gap-2 pt-1">
+                      <button
+                        onClick={() => setSelectedPreview(reg)}
+                        className="flex-1 py-2 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white text-[10px] font-mono font-bold uppercase tracking-wider rounded-xl flex items-center justify-center gap-1.5 transition-all"
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                        <span>Verify Card</span>
+                      </button>
+
+                      {resolvedStatus === 'Pending' && (
+                        <>
                           <button
-                            onClick={() => setConfirmDeleteId(reg.id)}
-                            title="Purge Registration"
-                            className="p-1.5 bg-slate-950 hover:bg-red-500/10 hover:border-red-500/20 text-slate-500 hover:text-red-400 border border-slate-800 rounded-lg transition-all cursor-pointer"
+                            onClick={() => onUpdateStatus(reg.id, 'Approved')}
+                            className="flex-1 py-2 bg-emerald-500/10 border border-emerald-500/20 hover:bg-emerald-500 hover:text-slate-950 text-emerald-400 text-[10px] font-mono font-bold uppercase tracking-wider rounded-xl flex items-center justify-center gap-1.5 transition-all"
                           >
-                            <Trash2 className="w-3.5 h-3.5" />
+                            <Check className="w-3.5 h-3.5" />
+                            <span>Approve</span>
                           </button>
 
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          )}
-        </div>
+                          <button
+                            onClick={() => onUpdateStatus(reg.id, 'Rejected')}
+                            className="flex-1 py-2 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500 hover:text-white text-rose-400 text-[10px] font-mono font-bold uppercase tracking-wider rounded-xl flex items-center justify-center gap-1.5 transition-all"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                            <span>Decline</span>
+                          </button>
+                        </>
+                      )}
+
+                      {resolvedStatus !== 'Pending' && (
+                        <button
+                          onClick={() => onUpdateStatus(reg.id, resolvedStatus === 'Approved' ? 'Rejected' : 'Approved')}
+                          className="py-2 px-3 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-amber-400 rounded-xl transition-all"
+                          title={resolvedStatus === 'Approved' ? 'Change to Rejected' : 'Change to Approved'}
+                        >
+                          <RefreshCw className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+
+                      <button
+                        onClick={() => setConfirmDeleteId(reg.id)}
+                        className="py-2 px-3 bg-slate-900 border border-slate-800 hover:bg-rose-500/10 text-slate-500 hover:text-red-400 hover:border-rose-500/20 rounded-xl transition-all"
+                        title="Purge Registration"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </>
+        )}
       </div>
 
       {/* MODAL 1: Verify & View Athlete Interactive Digital Card */}
