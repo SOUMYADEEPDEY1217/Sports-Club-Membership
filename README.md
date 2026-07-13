@@ -11,10 +11,9 @@ A modern, responsive Sports Club Membership web application developed for **Adam
 ## 📸 Website Preview
 
 <p align="center">
-  <img src="assets/website-preview.png" alt="Sports Club Membership Homepage" width="100%">
+  <img src="assets/website-preview.png" width="100%">
 </p>
 
-> **Note:** Save the uploaded screenshot as `assets/website-preview.png` inside your repository.
 
 ---
 
