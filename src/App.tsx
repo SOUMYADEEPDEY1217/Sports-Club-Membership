@@ -5,7 +5,7 @@ import DigitalCard from './components/DigitalCard';
 import RegistrationForm from './components/RegistrationForm';
 import { 
   Trophy, Search, Award, Activity, Flame, 
-  Menu, Info, Check, UserCheck, Sparkles, Layout, Mail, Phone, ExternalLink, ShieldCheck, Edit3, CheckCircle, XCircle, LogOut
+  Menu, X, Info, Check, UserCheck, Sparkles, Layout, Mail, Phone, ExternalLink, ShieldCheck, Edit3, CheckCircle, XCircle, LogOut
 } from 'lucide-react';
 import { onAuthStateChanged, signOut, User as FirebaseUser } from 'firebase/auth';
 import { doc, setDoc, updateDoc, collection, onSnapshot, query, where, deleteDoc } from 'firebase/firestore';
@@ -35,6 +35,7 @@ export default function App() {
   const [selectedStudent, setSelectedStudent] = useState<Registration | null>(null);
   const [searchError, setSearchError] = useState('');
   const [successRegistration, setSuccessRegistration] = useState<Registration | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Sync auth state
   useEffect(() => {
@@ -310,7 +311,7 @@ export default function App() {
           </div>
 
           {/* Desktop Tab Controllers & Auth Actions */}
-          <div className="flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-4">
             <nav className="flex gap-1.5 bg-slate-900/50 border border-slate-800 p-1 rounded-xl">
               <button
                 onClick={() => { setActiveTab('home'); setSuccessRegistration(null); }}
@@ -381,8 +382,119 @@ export default function App() {
               </button>
             )}
           </div>
+
+          {/* Mobile Menu Toggle button */}
+          <div className="flex md:hidden items-center gap-2">
+            {currentUser && (
+              <div className="flex items-center gap-1.5 bg-slate-900/40 border border-slate-800 px-2.5 py-1 rounded-lg">
+                <span className="text-[10px] font-bold text-slate-300 max-w-[80px] truncate">{currentUser.displayName || 'Athlete'}</span>
+              </div>
+            )}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800 rounded-lg cursor-pointer transition-all"
+            >
+              {mobileMenuOpen ? <X className="w-4 h-4 text-white" /> : <Menu className="w-4 h-4 text-slate-300" />}
+            </button>
+          </div>
         </div>
       </header>
+
+      {/* Mobile Drawer Navigation Overlay */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25, ease: 'easeInOut' }}
+            className="md:hidden sticky top-[71px] z-40 bg-[#020617] border-b border-slate-900 overflow-hidden"
+          >
+            <div className="px-4 py-5 space-y-4 max-w-7xl mx-auto bg-[#020617]/95 backdrop-blur-md">
+              <nav className="flex flex-col gap-2">
+                <button
+                  onClick={() => { setActiveTab('home'); setMobileMenuOpen(false); setSuccessRegistration(null); }}
+                  className={`w-full text-left px-4 py-3 rounded-xl text-xs font-mono tracking-wider font-bold uppercase transition-all duration-300 flex items-center gap-3 ${
+                    activeTab === 'home' 
+                      ? 'bg-amber-500 text-slate-950 shadow-[0_0_15px_rgba(245,158,11,0.25)] font-black' 
+                      : 'bg-slate-900/40 border border-slate-850 text-slate-400 hover:text-slate-100'
+                  }`}
+                >
+                  <Layout className="w-4 h-4 shrink-0" />
+                  <span>Overview</span>
+                </button>
+                
+                <button
+                  onClick={() => { setActiveTab('register'); setMobileMenuOpen(false); setSuccessRegistration(null); }}
+                  className={`w-full text-left px-4 py-3 rounded-xl text-xs font-mono tracking-wider font-bold uppercase transition-all duration-300 flex items-center gap-3 ${
+                    activeTab === 'register' 
+                      ? 'bg-amber-500 text-slate-950 shadow-[0_0_15px_rgba(245,158,11,0.25)] font-black' 
+                      : 'bg-slate-900/40 border border-slate-850 text-slate-400 hover:text-slate-100'
+                  }`}
+                >
+                  <Edit3 className="w-4 h-4 shrink-0" />
+                  <span>Registration</span>
+                </button>
+
+                <button
+                  onClick={() => { setActiveTab('student-corner'); setMobileMenuOpen(false); setSuccessRegistration(null); }}
+                  className={`w-full text-left px-4 py-3 rounded-xl text-xs font-mono tracking-wider font-bold uppercase transition-all duration-300 flex items-center justify-between ${
+                    activeTab === 'student-corner' 
+                      ? 'bg-amber-500 text-slate-950 shadow-[0_0_15px_rgba(245,158,11,0.25)] font-black' 
+                      : 'bg-slate-900/40 border border-slate-850 text-slate-400 hover:text-slate-100'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <Sparkles className="w-4 h-4 shrink-0" />
+                    <span>Student Corner</span>
+                  </div>
+                  <span className="text-[9px] bg-slate-950 px-2 py-0.5 rounded text-amber-400 font-normal">Active Card</span>
+                </button>
+
+                {currentUser?.email === 'rohan.dey1206@gmail.com' && (
+                  <button
+                    onClick={() => { setActiveTab('admin'); setMobileMenuOpen(false); setSuccessRegistration(null); }}
+                    className={`w-full text-left px-4 py-3 rounded-xl text-xs font-mono tracking-wider font-bold uppercase transition-all duration-300 flex items-center gap-3 ${
+                      activeTab === 'admin' 
+                        ? 'bg-amber-500 text-slate-950 shadow-[0_0_15px_rgba(245,158,11,0.25)] font-black' 
+                        : 'bg-slate-900/40 border border-slate-850 text-slate-400 hover:text-slate-100'
+                    }`}
+                  >
+                    <ShieldCheck className="w-4 h-4 shrink-0" />
+                    <span>Admin Panel</span>
+                  </button>
+                )}
+              </nav>
+
+              {/* Mobile User Profile Info & Session Actions */}
+              <div className="border-t border-slate-900 pt-4 mt-2">
+                {currentUser ? (
+                  <div className="flex items-center justify-between bg-slate-900/30 border border-slate-850 p-3 rounded-xl">
+                    <div className="flex flex-col text-left">
+                      <span className="text-xs font-bold text-white leading-tight">{currentUser.displayName || 'Athlete'}</span>
+                      <span className="text-[10px] font-mono text-zinc-500 truncate max-w-[180px] mt-0.5">{currentUser.email}</span>
+                    </div>
+                    <button
+                      onClick={() => { signOut(auth); setMobileMenuOpen(false); }}
+                      className="px-3.5 py-2 bg-red-950/40 hover:bg-red-500/10 border border-red-500/20 hover:border-red-500/30 text-red-400 text-xs font-mono font-bold uppercase rounded-xl transition-all cursor-pointer flex items-center gap-1.5"
+                    >
+                      <LogOut className="w-3.5 h-3.5" />
+                      <span>Log Out</span>
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => { setActiveTab('register'); setMobileMenuOpen(false); setSuccessRegistration(null); }}
+                    className="w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono text-xs font-black tracking-widest uppercase rounded-xl transition-all cursor-pointer text-center shadow-md"
+                  >
+                    Sign In / Authenticate
+                  </button>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Hero Welcome Announcement */}
       <section className="relative pt-12 pb-8 px-4 sm:px-6 md:px-8 text-center max-w-4xl mx-auto">
