@@ -1,0 +1,6 @@
+{
+  "name": "Adamas Sports Club",
+  "description": "An interactive, modern student registration and digital membership portal for Adamas Sports Club.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
