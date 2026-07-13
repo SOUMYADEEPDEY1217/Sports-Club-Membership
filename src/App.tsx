@@ -22,7 +22,8 @@ export default function App() {
     const saved = localStorage.getItem('asc_registrations_v2');
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved) as Registration[];
+        return parsed.filter(r => r.id !== 'ASC-2026-1024' && r.id !== 'ASC-2026-1152');
       } catch (e) {
         console.error("Failed to parse registrations", e);
       }
@@ -54,8 +55,14 @@ export default function App() {
     const q = query(collection(db, 'registrations'));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const list: Registration[] = [];
-      snapshot.forEach((doc) => {
-        list.push(doc.data() as Registration);
+      snapshot.forEach((docSnap) => {
+        const reg = docSnap.data() as Registration;
+        if (reg.id !== 'ASC-2026-1024' && reg.id !== 'ASC-2026-1152') {
+          list.push(reg);
+        } else {
+          // Attempt to delete it from Firestore permanently if it exists
+          deleteDoc(docSnap.ref).catch((err) => console.warn("Failed to delete stale registration:", err));
+        }
       });
       
       if (list.length > 0) {
