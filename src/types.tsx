@@ -137,30 +137,6 @@ export const PRESET_AVATARS = [
 
 export const INITIAL_REGISTRATIONS: Registration[] = [
   {
-    id: 'ASC-2026-1024',
-    fullName: 'Ananya Sen',
-    studentId: 'AU/2024/SOET/0045',
-    school: 'SOET',
-    department: 'Computer Science & Engineering',
-    yearOfStudy: '3rd Year',
-    email: 'ananya.sen@adamas.edu',
-    phone: '+91 98765 43210',
-    whatsappOptIn: true,
-    gender: 'Female',
-    primarySport: 'badminton',
-    secondarySport: 'table_tennis',
-    skillLevel: 'Advanced',
-    goals: ['Skill Improvement', 'Tournament Representation', 'Fitness & Agility'],
-    emergencyContactName: 'Dr. Alok Sen (Father)',
-    emergencyContactPhone: '+91 98300 12345',
-    medicalConditions: 'None',
-    avatarPresetId: 'av-badminton',
-    cardSkin: 'royal-gold',
-    registrationDate: '2026-06-15T14:30:00Z',
-    bloodGroup: 'O+',
-    status: 'Approved'
-  },
-  {
     id: 'ASC-2026-1089',
     fullName: 'Rohan Dey',
     studentId: 'AU/2025/SOS/0129',
@@ -182,30 +158,6 @@ export const INITIAL_REGISTRATIONS: Registration[] = [
     cardSkin: 'cyber-neon',
     registrationDate: '2026-07-12T09:40:00Z',
     bloodGroup: 'B+',
-    status: 'Approved'
-  },
-  {
-    id: 'ASC-2026-1152',
-    fullName: 'Vikramjit Roy',
-    studentId: 'AU/2023/SOBE/0341',
-    school: 'SOBE',
-    department: 'MBA - Sports Management',
-    yearOfStudy: '4th Year',
-    email: 'vikram.roy@adamas.edu',
-    phone: '+91 70031 22334',
-    whatsappOptIn: false,
-    gender: 'Male',
-    primarySport: 'football',
-    secondarySport: 'athletics',
-    skillLevel: 'Competitive',
-    goals: ['Tournament Representation', 'Leadership & Coaching Practice'],
-    emergencyContactName: 'Supriya Roy (Mother)',
-    emergencyContactPhone: '+91 91234 56789',
-    medicalConditions: 'Mild Asthma (has inhaler)',
-    avatarPresetId: 'av-soccer',
-    cardSkin: 'stealth-carbon',
-    registrationDate: '2026-05-10T10:15:00Z',
-    bloodGroup: 'A+',
     status: 'Approved'
   }
 ];
