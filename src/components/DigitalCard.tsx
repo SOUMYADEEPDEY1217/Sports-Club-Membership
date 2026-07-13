@@ -431,19 +431,21 @@ export default function DigitalCard({
       </p>
 
       {/* 3D Perspective Card Wrapper styled strictly to credit card aspect ratio (1:1.585) */}
-      <div 
-        id={`card-${registration.id}`}
-        className="w-full max-w-[328px] h-[520px] perspective-1000 cursor-pointer group"
-        onClick={handleFlip}
-      >
-        <motion.div 
-          className="w-full h-full preserve-3d relative duration-700 select-none"
-          animate={{ rotateY: isFlipped ? 180 : 0 }}
-          transition={{ type: "spring", stiffness: 100, damping: 15 }}
+      <div className="w-full max-w-[328px] flex justify-center items-center overflow-visible py-2">
+        <div 
+          id={`card-${registration.id}`}
+          className="w-[328px] h-[520px] perspective-1000 cursor-pointer group origin-center scale-[0.85] min-[360px]:scale-[0.9] min-[390px]:scale-[0.95] min-[420px]:scale-100 transition-transform"
+          onClick={handleFlip}
         >
-          {renderCardFront(false)}
-          {renderCardBack(false)}
-        </motion.div>
+          <motion.div 
+            className="w-full h-full preserve-3d relative duration-700 select-none"
+            animate={{ rotateY: isFlipped ? 180 : 0 }}
+            transition={{ type: "spring", stiffness: 100, damping: 15 }}
+          >
+            {renderCardFront(false)}
+            {renderCardBack(false)}
+          </motion.div>
+        </div>
       </div>
 
       {/* Download Action Option Panel or Verification Lock Alert */}
@@ -601,4 +603,3 @@ export default function DigitalCard({
     </div>
   );
 }
-
