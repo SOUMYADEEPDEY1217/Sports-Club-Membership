@@ -1,9 +1,33 @@
+# Dependency directories
 node_modules/
+
+# Build outputs
 build/
 dist/
+
+# Test coverage
 coverage/
+
+# System files
 .DS_Store
+Thumbs.db
+
+# Logs
 *.log
-.env*
-!.env.example
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local environment files (NEVER commit secrets to GitHub)
 .env
+.env.local
+.env.development
+.env.development.local
+.env.test
+.env.test.local
+.env.production
+.env.production.local
+.env*.local
+
+# Except .env.example
+!.env.example
