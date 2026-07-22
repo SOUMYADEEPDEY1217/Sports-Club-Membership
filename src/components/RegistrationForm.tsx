@@ -73,8 +73,9 @@ export default function RegistrationForm({ onRegister, onSave, isEdit = false, i
         const studentIdUpper = formData.studentId.trim().toUpperCase();
         const isAUFormat = /^AU\/\d{4}\/[A-Z0-9\/-]+$/i.test(studentIdUpper);
         const isUGFormat = /^UG\/[A-Z0-9]+\/[A-Z0-9\/-]+$/i.test(studentIdUpper);
-        if (!isAUFormat && !isUGFormat) {
-          nextErrors.studentId = 'Invalid format. Must be AU/YYYY/******* or UG/SCHOOL/**/**/***';
+        const isAPPFormat = /^APP\/[A-Z0-9\/-]+$/i.test(studentIdUpper);
+        if (!isAUFormat && !isUGFormat && !isAPPFormat) {
+          nextErrors.studentId = 'Invalid format. Must be APP/****/***** (Application No), AU/YYYY/*******, or UG/SCHOOL/**/**/***';
         }
       }
       if (!formData.department.trim()) nextErrors.department = 'Department name is required';
@@ -205,19 +206,19 @@ export default function RegistrationForm({ onRegister, onSave, isEdit = false, i
                 {errors.fullName && <p className="text-xs text-red-400 mt-1 font-mono">{errors.fullName}</p>}
               </div>
 
-              {/* Student ID */}
+              {/* Student ID / Roll No / Application No */}
               <div>
                 <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1.5 font-bold">
-                  Adamas Student ID / Roll <span className="text-red-400">*</span>
+                  Roll No / Student ID / Application No <span className="text-red-400">*</span>
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g., AU/2026/SOET/012 or UG/SOET/21/CS/001"
+                  placeholder="e.g., APP/2026/1089, AU/2026/SOET/012, or UG/SOET/21/CS/001"
                   value={formData.studentId}
                   onChange={e => setFormData(p => ({ ...p, studentId: e.target.value }))}
                   className={`w-full bg-slate-950/70 border ${errors.studentId ? 'border-red-500/80' : 'border-slate-800 focus:border-amber-500'} rounded-xl px-4 py-3 text-sm text-slate-100 outline-none transition-all placeholder:text-zinc-600 font-mono`}
                 />
-                <p className="text-[10px] text-zinc-500 font-mono mt-1">Acceptable formats: AU/YYYY/xxxxxxx or UG/SCHOOL/xx/xx/xxx</p>
+                <p className="text-[10px] text-zinc-500 font-mono mt-1">Acceptable formats: APP/****/***** (Application No), AU/YYYY/xxxxxxx, or UG/SCHOOL/xx/xx/xxx</p>
                 {errors.studentId && <p className="text-xs text-red-400 mt-1 font-mono">{errors.studentId}</p>}
               </div>
 
