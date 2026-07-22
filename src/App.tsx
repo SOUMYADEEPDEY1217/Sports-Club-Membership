@@ -79,7 +79,8 @@ export default function App() {
         setRegistrations(INITIAL_REGISTRATIONS);
         INITIAL_REGISTRATIONS.forEach(async (init) => {
           try {
-            await setDoc(doc(db, 'registrations', init.id), init);
+            const docKey = init.id.replace(/\//g, '_');
+            await setDoc(doc(db, 'registrations', docKey), init);
           } catch (e) {
             console.warn("Failed to seed registration to Firestore (likely permission denied):", e);
           }
