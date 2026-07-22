@@ -160,7 +160,9 @@ export const INITIAL_REGISTRATIONS: Registration[] = [
     bloodGroup: 'B+',
     status: 'Approved'
   }
-];  id: string;
+];  
+  {
+  id: string;
   name: string;
   bgGradient: string;
   borderColor: string;
@@ -169,6 +171,7 @@ export const INITIAL_REGISTRATIONS: Registration[] = [
   glowColor: string;
   chipBg: string;
   backPattern: string;
+  }
 export const SPORTS_LIST: SportConfig[] = [
   { id: 'football', name: 'Football', emoji: '⚽', iconName: 'Trophy', description: 'Experience the beautiful game on our FIFA-standard turf.', category: 'Outdoor' },
   { id: 'cricket', name: 'Cricket', emoji: '🏏', iconName: 'Shield', description: 'Perfect your shots and spin at our professional nets and oval.', category: 'Outdoor' },
