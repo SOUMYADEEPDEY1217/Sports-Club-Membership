@@ -138,7 +138,8 @@ export default function App() {
   const handleRegister = async (newRegData: Omit<Registration, 'id' | 'registrationDate'>) => {
     if (!currentUser) return;
     const nextNumericId = 1000 + registrations.length + 1;
-    const registrationId = `ASC-2026-${nextNumericId}`;
+    const registrationId = `APP/2026/${nextNumericId}`;
+    const docKey = registrationId.replace(/\//g, '_');
     const newReg: Registration & { userId?: string } = {
       ...newRegData,
       id: registrationId,
@@ -148,7 +149,7 @@ export default function App() {
     };
 
     try {
-      await setDoc(doc(db, 'registrations', registrationId), newReg);
+      await setDoc(doc(db, 'registrations', docKey), newReg);
       setSuccessRegistration(newReg);
       setSelectedStudent(newReg);
       setActiveTab('student-corner');
@@ -164,7 +165,8 @@ export default function App() {
       setSelectedStudent(prev => prev ? { ...prev, status } : null);
     }
     try {
-      await updateDoc(doc(db, 'registrations', id), { status });
+      const docKey = id.replace(/\//g, '_');
+      await updateDoc(doc(db, 'registrations', docKey), { status });
     } catch (e) {
       console.error("Failed to update status in Firestore:", e);
     }
@@ -177,7 +179,8 @@ export default function App() {
       setSelectedStudent(null);
     }
     try {
-      await deleteDoc(doc(db, 'registrations', id));
+      const docKey = id.replace(/\//g, '_');
+      await deleteDoc(doc(db, 'registrations', docKey));
     } catch (e) {
       console.error("Failed to delete from Firestore:", e);
     }
@@ -186,7 +189,8 @@ export default function App() {
   // Add registration from admin side
   const handleAdminAddRegistration = async (newRegData: Omit<Registration, 'id' | 'registrationDate'>) => {
     const nextNumericId = 1000 + registrations.length + 1;
-    const registrationId = `ASC-2026-${nextNumericId}`;
+    const registrationId = `APP/2026/${nextNumericId}`;
+    const docKey = registrationId.replace(/\//g, '_');
     const newReg: Registration = {
       ...newRegData,
       id: registrationId,
@@ -197,7 +201,7 @@ export default function App() {
     setRegistrations(prev => [newReg, ...prev]);
 
     try {
-      await setDoc(doc(db, 'registrations', registrationId), newReg);
+      await setDoc(doc(db, 'registrations', docKey), newReg);
     } catch (e) {
       console.error("Error saving admin-created registration:", e);
     }
@@ -213,7 +217,8 @@ export default function App() {
     }
 
     try {
-      await updateDoc(doc(db, 'registrations', studentId), { cardSkin: skinId });
+      const docKey = studentId.replace(/\//g, '_');
+      await updateDoc(doc(db, 'registrations', docKey), { cardSkin: skinId });
     } catch (e) {
       console.warn("Could not sync skin to Firestore:", e);
     }
@@ -228,7 +233,8 @@ export default function App() {
     }
 
     try {
-      await updateDoc(doc(db, 'registrations', studentId), { avatarPresetId: avatarId, avatarUrl: null });
+      const docKey = studentId.replace(/\//g, '_');
+      await updateDoc(doc(db, 'registrations', docKey), { avatarPresetId: avatarId, avatarUrl: null });
     } catch (e) {
       console.warn("Could not sync avatar to Firestore:", e);
     }
@@ -243,7 +249,8 @@ export default function App() {
     }
 
     try {
-      await updateDoc(doc(db, 'registrations', studentId), { avatarUrl: base64 });
+      const docKey = studentId.replace(/\//g, '_');
+      await updateDoc(doc(db, 'registrations', docKey), { avatarUrl: base64 });
     } catch (e) {
       console.warn("Could not sync photo to Firestore:", e);
     }
@@ -261,7 +268,8 @@ export default function App() {
     setEditingStudent(null);
 
     try {
-      await setDoc(doc(db, 'registrations', updatedStudent.id), updatedStudent);
+      const docKey = updatedStudent.id.replace(/\//g, '_');
+      await setDoc(doc(db, 'registrations', docKey), updatedStudent);
     } catch (e) {
       console.error("Error saving updated student to Firestore:", e);
     }
@@ -274,12 +282,15 @@ export default function App() {
     
     const query = searchQuery.trim().toLowerCase();
     if (!query) {
-      setSearchError('Please enter a Student ID or Email address.');
+      setSearchError('Please enter a Roll No, Application No, or Email address.');
       return;
     }
 
     const found = registrations.find(reg => 
       reg.studentId.toLowerCase() === query || 
+      reg.studentId.toLowerCase().includes(query) ||
+      reg.id.toLowerCase() === query ||
+      reg.id.toLowerCase().includes(query) ||
       reg.email.toLowerCase() === query ||
       reg.fullName.toLowerCase().includes(query)
     );
