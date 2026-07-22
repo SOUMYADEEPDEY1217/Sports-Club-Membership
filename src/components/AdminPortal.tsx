@@ -33,7 +33,7 @@ export default function AdminPortal({
   // Streamlined Form State for Admin adding user
   const [newReg, setNewReg] = useState({
     fullName: '',
-    studentId: 'AU/2026/',
+    studentId: 'APP/2026/',
     school: 'SOET',
     department: '',
     yearOfStudy: '1st Year',
@@ -114,8 +114,9 @@ export default function AdminPortal({
     const studentIdUpper = newReg.studentId.trim().toUpperCase();
     const isAUFormat = /^AU\/\d{4}\/[A-Z0-9\/-]+$/i.test(studentIdUpper);
     const isUGFormat = /^UG\/[A-Z0-9]+\/[A-Z0-9\/-]+$/i.test(studentIdUpper);
-    if (!isAUFormat && !isUGFormat) {
-      setFormError('Student ID must be format: AU/YYYY/XXXX or UG/SCHOOL/XX/XX/XXX');
+    const isAPPFormat = /^APP\/[A-Z0-9\/-]+$/i.test(studentIdUpper);
+    if (!isAUFormat && !isUGFormat && !isAPPFormat) {
+      setFormError('Student ID / Application No must match format: APP/****/***** , AU/YYYY/XXXX or UG/SCHOOL/XX/XX/XXX');
       return;
     }
 
@@ -292,8 +293,8 @@ export default function AdminPortal({
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="border-b border-slate-850 bg-slate-950/50 text-[9px] font-mono uppercase tracking-wider text-slate-500">
-                    <th className="py-3 px-4">Athlete ID / Details</th>
-                    <th className="py-3 px-4">University ID & Contact</th>
+                    <th className="py-3 px-4">Athlete / App No</th>
+                    <th className="py-3 px-4">Roll No / Application No & Contact</th>
                     <th className="py-3 px-4">Focus Discipline</th>
                     <th className="py-3 px-4">Campus Dept</th>
                     <th className="py-3 px-4">Audit Status</th>
@@ -476,8 +477,9 @@ export default function AdminPortal({
                     {/* Meta Fields */}
                     <div className="grid grid-cols-2 gap-x-4 gap-y-2 bg-slate-950/40 border border-slate-850/60 p-3 rounded-xl text-[11px]">
                       <div>
-                        <span className="text-slate-500 font-mono text-[9px] block uppercase">University ID</span>
+                        <span className="text-slate-500 font-mono text-[9px] block uppercase">Roll No / Application No</span>
                         <span className="font-mono text-slate-200 font-bold">{reg.studentId}</span>
+                        <span className="text-[9px] font-mono text-amber-500 block mt-0.5">App No: {reg.id}</span>
                       </div>
                       <div>
                         <span className="text-slate-500 font-mono text-[9px] block uppercase">Campus Dept</span>
@@ -701,17 +703,17 @@ export default function AdminPortal({
                     />
                   </div>
 
-                  {/* Student ID */}
+                  {/* Roll No / Application No */}
                   <div className="space-y-1.5">
-                    <label className="text-zinc-400 font-mono text-[10px] uppercase block tracking-wider">Student UID *</label>
+                    <label className="text-zinc-400 font-mono text-[10px] uppercase block tracking-wider">Roll No / Student ID / Application No *</label>
                     <input 
                       type="text" 
-                      placeholder="e.g. AU/2026/0001 or UG/SOET/23/04/004"
+                      placeholder="e.g. APP/2026/1089, AU/2026/0001, or UG/SOET/23/04/004"
                       value={newReg.studentId}
                       onChange={(e) => setNewReg(p => ({ ...p, studentId: e.target.value }))}
                       className="w-full bg-slate-950/80 border border-slate-800 focus:border-amber-500/40 text-slate-200 text-xs px-3.5 py-2.5 rounded-xl outline-none font-mono"
                     />
-                    <p className="text-[9px] text-zinc-500 font-mono">Must match university registrar standard AU/YYYY/... or UG/...</p>
+                    <p className="text-[9px] text-zinc-500 font-mono">Accepts formats: APP/****/***** (Application No), AU/YYYY/..., or UG/...</p>
                   </div>
 
                   {/* School & Department */}
